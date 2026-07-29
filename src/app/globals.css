@@ -1,188 +1,296 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Design tokens
-   Motif: the Chinook arch — a band of warm light on a dark
-   western horizon. Cold slate base, warm amber horizon, and
-   hairline technical rules borrowed from engineering drawings.
+   Bowstack — "Drawing Set"
+
+   The subject's world is engineering drawings, datasheets and
+   equipment nameplates. So the page is drafting vellum with ink
+   on it, annotated with real drafting furniture: dimension lines,
+   leader callouts, revision markers, title blocks.
+
+   Deliberately NOT: dark ground + single bright accent, cream +
+   serif + terracotta, or broadsheet hairline columns.
    ============================================================ */
 
 @theme {
-  /* Base — cold, deep, slightly blue charcoal */
-  --color-base-950: #07090c;
-  --color-base-900: #0b0e13;
-  --color-base-850: #10141b;
-  --color-base-800: #151a23;
-  --color-base-700: #1e2530;
-  --color-base-600: #2b3441;
-  --color-base-500: #3d4857;
-  --color-base-400: #5b6777;
-  --color-base-300: #8592a3;
-  --color-base-200: #b3bdc9;
-  --color-base-100: #d8dee6;
-  --color-base-50: #eef1f5;
+  /* Ground — drafting vellum. Pale grey-green, never cream. */
+  --color-vellum-50: #f5f6f2;
+  --color-vellum-100: #eff1eb;
+  --color-vellum-200: #e9ebe5;
+  --color-vellum-300: #dfe2da;
+  --color-vellum-400: #c9cdc2;
+  --color-vellum-500: #a9afa2;
 
-  /* Chinook — warm horizon accent */
-  --color-chinook-600: #b4460f;
-  --color-chinook-500: #d95f18;
-  --color-chinook-400: #f07c26;
-  --color-chinook-300: #f79d4d;
-  --color-chinook-200: #fbbe86;
+  /* Ink — cool, slightly blue-black, like a technical pen */
+  --color-ink-900: #12151a;
+  --color-ink-800: #1d2229;
+  --color-ink-700: #2f3640;
+  --color-ink-600: #4a515b;
+  --color-ink-500: #656d78;
+  --color-ink-400: #868d97;
 
-  /* Signal — cool counterpoint for "verified/secure" states */
-  --color-signal-500: #2f9e77;
-  --color-signal-400: #3fbf92;
+  /* Oxide — structural steel primer. The redline accent. */
+  --color-oxide-700: #82301f;
+  --color-oxide-600: #a8402a;
+  --color-oxide-500: #c05236;
+  --color-oxide-100: #f0ddd6;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+  /* Survey — measured / verified values */
+  --color-survey-700: #14536b;
+  --color-survey-600: #1e6e8c;
+  --color-survey-100: #d9e8ee;
+
+  /* Plate — the nameplate object */
+  --color-plate-dark: #2b3038;
+  --color-plate-mid: #3c434d;
+  --color-plate-light: #59616d;
+
+  --font-display: var(--font-plex-condensed), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
   --text-2xs: 0.6875rem;
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
-  * {
-    border-color: color-mix(in oklab, var(--color-base-600) 55%, transparent);
-  }
-
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
   }
 
   body {
-    background-color: var(--color-base-950);
-    color: var(--color-base-100);
+    background-color: var(--color-vellum-200);
+    color: var(--color-ink-800);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
+    /* faint vellum tooth */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 3px,
+        color-mix(in oklab, var(--color-vellum-500) 5%, transparent) 3px 4px
+      );
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-chinook-500) 35%, transparent);
-    color: var(--color-base-50);
+    background-color: color-mix(in oklab, var(--color-oxide-600) 22%, transparent);
   }
 
-  h1, h2, h3, h4 {
-    color: var(--color-base-50);
-    letter-spacing: -0.022em;
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-ink-900);
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
 
-  p {
-    text-wrap: pretty;
+  p { text-wrap: pretty; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-oxide-600);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  /* Monospace technical label — the spec-sheet voice */
-  .label {
+  /* ---- Title-block lettering: the drawing annotation voice ---- */
+  .anno {
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
     line-height: 1;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-base-400);
+    color: var(--color-ink-500);
   }
 
-  /* Hairline engineering grid */
-  .grid-rule {
+  /* ---- A sheet: bordered drawing area ---- */
+  .sheet {
+    background: var(--color-vellum-100);
+    border: 1px solid var(--color-vellum-400);
+    border-radius: 2px;
+  }
+
+  .sheet-inset {
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-vellum-400) 45%, transparent);
+  }
+
+  /* ---- Drafting grid, as on gridded vellum ---- */
+  .drafting-grid {
     background-image:
-      linear-gradient(to right, color-mix(in oklab, var(--color-base-600) 40%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, var(--color-base-600) 40%, transparent) 1px, transparent 1px);
-    background-size: 72px 72px;
+      linear-gradient(to right, color-mix(in oklab, var(--color-vellum-500) 24%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-vellum-500) 24%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
-  /* The Chinook arch: warm light banding a dark horizon */
-  .chinook-arch {
+  .drafting-grid-lg {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-vellum-500) 34%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-vellum-500) 34%, transparent) 1px, transparent 1px);
+    background-size: 96px 96px;
+  }
+
+  /* ---- The nameplate: engraved metal, the signature object ---- */
+  .nameplate {
     background:
-      radial-gradient(
-        120% 62% at 50% 104%,
-        color-mix(in oklab, var(--color-chinook-400) 46%, transparent) 0%,
-        color-mix(in oklab, var(--color-chinook-600) 24%, transparent) 34%,
-        transparent 68%
-      );
+      linear-gradient(148deg,
+        var(--color-plate-light) 0%,
+        var(--color-plate-mid) 26%,
+        var(--color-plate-dark) 55%,
+        var(--color-plate-mid) 100%);
+    border-radius: 3px;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.22) inset,
+      0 -1px 0 0 rgba(0, 0, 0, 0.4) inset,
+      0 18px 40px -18px rgba(18, 21, 26, 0.55),
+      0 2px 6px -2px rgba(18, 21, 26, 0.3);
   }
 
-  .chinook-text {
-    background: linear-gradient(
-      100deg,
-      var(--color-chinook-200) 0%,
-      var(--color-chinook-400) 42%,
-      var(--color-chinook-500) 100%
+  /* brushed-metal grain */
+  .nameplate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 3px;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      92deg,
+      rgba(255, 255, 255, 0.045) 0 1px,
+      transparent 1px 3px
     );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
   }
 
-  /* Panel — the recurring surface for cards and tables */
-  .panel {
-    background: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--color-base-800) 78%, transparent) 0%,
-      color-mix(in oklab, var(--color-base-900) 90%, transparent) 100%
-    );
-    border: 1px solid color-mix(in oklab, var(--color-base-600) 52%, transparent);
-    border-radius: 0.5rem;
+  /* engraved text sits down in the metal */
+  .engraved {
+    color: #cfd4da;
+    text-shadow:
+      0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 255, 255, 0.12);
   }
 
-  .panel-hover {
-    transition: border-color 260ms var(--ease-out-expo),
-                transform 260ms var(--ease-out-expo),
-                background-color 260ms var(--ease-out-expo);
+  .engraved-dim {
+    color: #949ba4;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
   }
 
-  .panel-hover:hover {
-    border-color: color-mix(in oklab, var(--color-chinook-500) 46%, transparent);
-    transform: translateY(-2px);
+  /* corner fasteners */
+  .rivet {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #8b939d 0%, #4a515b 55%, #2a2f36 100%);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.25);
   }
 
-  .rule-x {
+  /* ---- Dimension line with end ticks ---- */
+  .dim-line {
+    position: relative;
     height: 1px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      color-mix(in oklab, var(--color-base-500) 60%, transparent) 18%,
-      color-mix(in oklab, var(--color-base-500) 60%, transparent) 82%,
-      transparent
+    background: var(--color-ink-400);
+  }
+
+  .dim-line::before,
+  .dim-line::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 1px;
+    height: 9px;
+    background: var(--color-ink-400);
+  }
+
+  .dim-line::before { left: 0; }
+  .dim-line::after { right: 0; }
+
+  /* ---- Leader callout: a small circled reference ---- */
+  .leader-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 1px solid var(--color-oxide-600);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--color-oxide-600);
+    flex-shrink: 0;
+  }
+
+  /* ---- Redline: the annotation accent ---- */
+  .redline {
+    border-left: 2px solid var(--color-oxide-600);
+  }
+
+  /* ---- Hatching, for emphasis fills ---- */
+  .hatch {
+    background-image: repeating-linear-gradient(
+      45deg,
+      color-mix(in oklab, var(--color-oxide-600) 14%, transparent) 0 1px,
+      transparent 1px 7px
     );
+  }
+
+  /* ---- Buttons ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1.35rem;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .btn-solid {
+    background: var(--color-oxide-600);
+    color: var(--color-vellum-50);
+  }
+  .btn-solid:hover { background: var(--color-oxide-700); }
+
+  .btn-line {
+    border: 1px solid var(--color-ink-700);
+    color: var(--color-ink-800);
+  }
+  .btn-line:hover {
+    background: var(--color-ink-900);
+    color: var(--color-vellum-100);
   }
 }
 
 @layer utilities {
   .container-x {
     width: 100%;
-    max-width: 78rem;
+    max-width: 80rem;
     margin-inline: auto;
     padding-inline: 1.5rem;
   }
 
   @media (min-width: 1024px) {
-    .container-x {
-      padding-inline: 2.5rem;
-    }
+    .container-x { padding-inline: 2.5rem; }
   }
 
   .mask-fade-b {
-    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-  }
-
-  .mask-fade-edges {
-    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
   }
 }
 
+/* One orchestrated moment: the nameplate rows etch in on load. */
+@keyframes etch-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.etch-row {
+  animation: etch-in 460ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;

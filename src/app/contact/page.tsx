@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
-import { Container, Label, Panel, Rule, Section } from "@/components/ui";
+import { Anno, Container, Section, Sheet } from "@/components/ui";
 import { brand } from "@/content/brand";
 import { ContactForm } from "./contact-form";
 
@@ -29,44 +29,47 @@ export default function ContactPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Contact"
+        eyebrow="Request for information"
         title="Start with a conversation."
         lede="Tell us what your team spends its week on, or bring the specific obligation that's keeping AI out of your business."
       />
 
       <Section>
         <Container>
-          <div className="grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
-            <Panel className="p-8 lg:p-10">
+          <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+            <Sheet className="p-7 lg:p-9">
               <ContactForm />
-            </Panel>
+            </Sheet>
 
             <div>
-              <Label>What to expect</Label>
-              <ul className="mt-7 space-y-7">
-                {expect.map((item, i) => (
-                  <li key={item.t}>
-                    <h3 className="text-sm font-semibold text-base-50">{item.t}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-base-300">{item.d}</p>
-                    {i < expect.length - 1 && <Rule className="mt-7" />}
-                  </li>
+              <Anno className="text-oxide-600">What to expect</Anno>
+              <dl className="mt-5 divide-y divide-vellum-300 border-y border-vellum-400">
+                {expect.map((item) => (
+                  <div key={item.t} className="py-4">
+                    <dt className="font-display text-base font-semibold text-ink-900">
+                      {item.t}
+                    </dt>
+                    <dd className="mt-1.5 text-sm leading-relaxed text-ink-600">
+                      {item.d}
+                    </dd>
+                  </div>
                 ))}
-              </ul>
+              </dl>
 
-              <Rule className="my-9" />
-
-              <Label>Direct</Label>
-              <div className="mt-5 space-y-2">
-                <a
-                  href={`mailto:${brand.contact.email}`}
-                  className="block font-mono text-sm text-chinook-300 transition-colors hover:text-chinook-200"
-                >
-                  {brand.contact.email}
-                </a>
-                <p className="text-sm text-base-400">
-                  {brand.city}, {brand.regionCode} — on-site across{" "}
-                  {brand.serviceArea}.
-                </p>
+              <div className="mt-9">
+                <Anno className="text-oxide-600">Direct</Anno>
+                <div className="mt-4 space-y-2">
+                  <a
+                    href={`mailto:${brand.contact.email}`}
+                    className="block font-mono text-sm text-ink-800 transition-colors hover:text-oxide-600"
+                  >
+                    {brand.contact.email}
+                  </a>
+                  <p className="text-sm text-ink-500">
+                    {brand.city}, {brand.regionCode} — on-site across{" "}
+                    {brand.serviceArea}.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

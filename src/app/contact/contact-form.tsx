@@ -12,13 +12,13 @@ const interests = [
 ] as const;
 
 const fieldClass =
-  "w-full rounded-md border border-base-600 bg-base-950/60 px-3.5 py-2.5 text-sm text-base-50 " +
-  "placeholder:text-base-500 transition-colors focus:border-chinook-500 focus:outline-none";
+  "w-full rounded-sm border border-vellum-400 bg-vellum-50 px-3 py-2.5 text-sm text-ink-900 " +
+  "placeholder:text-ink-400 transition-colors focus:border-oxide-600 focus:outline-none";
 
 /**
- * Composes a mailto: with the enquiry pre-filled. No backend, no third-party
- * form processor, and no visitor data touching anyone else's server — which is
- * the same promise the rest of the site makes, so it should hold here too.
+ * Composes a mailto: with the enquiry pre-filled. No backend, no
+ * third-party form processor, and no visitor data touching anyone else's
+ * server — the same promise the rest of the site makes.
  */
 export function ContactForm() {
   const [sent, setSent] = useState(false);
@@ -47,41 +47,31 @@ export function ContactForm() {
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="label mb-2.5 block">
-            Name
-          </label>
+          <label htmlFor="name" className="anno mb-2 block">Name</label>
           <input id="name" name="name" required autoComplete="name" className={fieldClass} />
         </div>
         <div>
-          <label htmlFor="company" className="label mb-2.5 block">
-            Company
-          </label>
+          <label htmlFor="company" className="anno mb-2 block">Company</label>
           <input id="company" name="company" autoComplete="organization" className={fieldClass} />
         </div>
       </div>
 
       <div>
-        <label htmlFor="email" className="label mb-2.5 block">
-          Email
-        </label>
+        <label htmlFor="email" className="anno mb-2 block">Email</label>
         <input id="email" name="email" type="email" required autoComplete="email" className={fieldClass} />
       </div>
 
       <div>
-        <label htmlFor="interest" className="label mb-2.5 block">
-          What you&rsquo;re after
-        </label>
+        <label htmlFor="interest" className="anno mb-2 block">What you&rsquo;re after</label>
         <select id="interest" name="interest" className={fieldClass} defaultValue={interests[0]}>
           {interests.map((i) => (
-            <option key={i} value={i} className="bg-base-900">
-              {i}
-            </option>
+            <option key={i} value={i}>{i}</option>
           ))}
         </select>
       </div>
 
       <div>
-        <label htmlFor="message" className="label mb-2.5 block">
+        <label htmlFor="message" className="anno mb-2 block">
           What are you trying to solve?
         </label>
         <textarea
@@ -94,21 +84,18 @@ export function ContactForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-chinook-500 px-5 py-3 text-sm font-medium text-base-950 transition-colors hover:bg-chinook-400 sm:w-auto"
-      >
+      <button type="submit" className="btn btn-solid w-full sm:w-auto">
         Send enquiry
       </button>
 
       {sent && (
-        <p className="text-sm text-signal-400" role="status">
+        <p className="text-sm text-survey-600" role="status">
           Your email client should have opened with the message ready. If it
           didn&rsquo;t, write to {brand.contact.email} directly.
         </p>
       )}
 
-      <p className="text-xs leading-relaxed text-base-500">
+      <p className="text-xs leading-relaxed text-ink-500">
         This form opens your own email client — it does not post your details to
         a third-party form service. Nothing you type here is stored anywhere.
       </p>

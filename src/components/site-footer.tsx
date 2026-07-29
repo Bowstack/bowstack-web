@@ -1,40 +1,37 @@
 import Link from "next/link";
 import { brand, nav } from "@/content/brand";
-import { ArchMark } from "@/components/wordmark";
-import { Container } from "@/components/ui";
+import { StackMark } from "@/components/wordmark";
+import { Anno, Container } from "@/components/ui";
 
+/**
+ * The footer is the drawing's title block: who drew it, where, what
+ * revision, and the sheet's standing note.
+ */
 export function SiteFooter() {
   return (
-    <footer className="relative mt-auto overflow-hidden border-t border-base-700/70 bg-base-900">
-      <div
-        aria-hidden
-        className="chinook-arch pointer-events-none absolute inset-x-0 bottom-0 h-40 opacity-30"
-      />
-      <Container className="relative py-16">
-        <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr]">
-          <div className="max-w-sm">
+    <footer className="mt-auto border-t-2 border-ink-800 bg-vellum-100">
+      <Container className="py-12">
+        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          <div>
             <div className="flex items-center gap-2.5">
-              <ArchMark className="h-7 w-7 text-base-300" />
-              <span className="text-[0.975rem] font-semibold tracking-tight text-base-50">
+              <StackMark className="h-6 w-6 text-ink-700" />
+              <span className="font-display text-lg font-semibold text-ink-900">
                 {brand.name}
               </span>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-base-400">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-600">
               {brand.blurb}
-            </p>
-            <p className="label mt-6">
-              {brand.city}, {brand.regionCode} · {brand.country}
             </p>
           </div>
 
           <div>
-            <h3 className="label">Site</h3>
-            <ul className="mt-4 space-y-2.5">
+            <Anno className="text-oxide-600">Sheets</Anno>
+            <ul className="mt-3.5 space-y-2">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-base-300 transition-colors hover:text-base-50"
+                    className="text-sm text-ink-600 transition-colors hover:text-ink-900"
                   >
                     {item.label}
                   </Link>
@@ -44,45 +41,43 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="label">Contact</h3>
-            <ul className="mt-4 space-y-2.5">
+            <Anno className="text-oxide-600">Contact</Anno>
+            <ul className="mt-3.5 space-y-2">
               <li>
                 <a
                   href={`mailto:${brand.contact.email}`}
-                  className="font-mono text-sm text-base-300 transition-colors hover:text-chinook-300"
+                  className="font-mono text-sm text-ink-600 transition-colors hover:text-oxide-600"
                 >
                   {brand.contact.email}
                 </a>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-base-300 transition-colors hover:text-base-50"
-                >
+                <Link href="/contact" className="text-sm text-ink-600 hover:text-ink-900">
                   Book an assessment
                 </Link>
               </li>
               <li>
-                <a
-                  href={brand.social.github}
-                  className="text-sm text-base-300 transition-colors hover:text-base-50"
-                >
+                <a href={brand.social.github} className="text-sm text-ink-600 hover:text-ink-900">
                   GitHub
                 </a>
               </li>
             </ul>
           </div>
+
+          <div>
+            <Anno className="text-oxide-600">Drawn in</Anno>
+            <p className="mt-3.5 text-sm text-ink-600">
+              {brand.city}, {brand.regionCode}
+              <br />
+              {brand.country}
+            </p>
+          </div>
         </div>
 
-        <div className="rule-x mt-14" />
-
-        <div className="mt-6 flex flex-col gap-3 text-xs text-base-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {brand.legal}. Built in {brand.city}.
-          </p>
-          <p className="font-mono text-2xs tracking-widest uppercase">
-            Your data stays yours
-          </p>
+        <div className="mt-11 grid gap-3 border-t border-vellum-400 pt-5 sm:grid-cols-3 sm:items-center">
+          <Anno>© {new Date().getFullYear()} {brand.legal}</Anno>
+          <Anno className="sm:text-center">Rev. A · {brand.legalReviewDate}</Anno>
+          <Anno className="text-oxide-600 sm:text-right">Your data stays yours</Anno>
         </div>
       </Container>
     </footer>

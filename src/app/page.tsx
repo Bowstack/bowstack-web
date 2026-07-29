@@ -4,13 +4,13 @@ import {
   ApproachSection,
   ServicesSection,
   FaqSection,
+  FounderSection,
   CtaSection,
 } from "@/components/sections";
 import {
   HardwareSection,
   ConfidentialitySection,
   PricingSection,
-  FounderSection,
 } from "@/components/specialized";
 import { brand } from "@/content/brand";
 import {

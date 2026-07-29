@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
 import { CtaSection } from "@/components/sections";
 import {
+  Anno,
   Container,
-  Label,
-  Panel,
-  Rule,
   Section,
-  SectionHeading,
+  Sheet,
+  TitleBlock,
 } from "@/components/ui";
 import { brand } from "@/content/brand";
 import { controls } from "@/content/site";
@@ -60,51 +59,37 @@ const regimes = [
 ];
 
 const cannotClaim = [
-  {
-    claim: "\u201cWe are HIA-compliant\u201d",
-    why: "Compliance under the Health Information Act is the custodian's status. A vendor cannot hold it on your behalf.",
-  },
-  {
-    claim: "\u201cCertified\u201d or \u201capproved by the Commissioner\u201d",
-    why: "The Office of the Information and Privacy Commissioner reviews and comments. It does not certify, approve or accredit AI systems.",
-  },
-  {
-    claim: "\u201cCompliant with Canada's AI law\u201d",
-    why: "There is no Canadian AI statute. The Artificial Intelligence and Data Act died on the Order Paper at prorogation on 6 January 2025 and has not been replaced.",
-  },
-  {
-    claim: "\u201cIt's illegal to store Canadian data in the US\u201d",
-    why: "False. PIPEDA expressly permits transfers for processing. We will not sell against a premise your own counsel can dismantle in one meeting.",
-  },
-  {
-    claim: "\u201cNo hallucinations\u201d or \u201cguaranteed accurate\u201d",
-    why: "Unprovable, and it would convert a known limitation of every language model into a contractual warranty.",
-  },
+  { claim: "\u201cWe are HIA-compliant\u201d", why: "Compliance under the Health Information Act is the custodian's status. A vendor cannot hold it on your behalf." },
+  { claim: "\u201cCertified\u201d or \u201capproved by the Commissioner\u201d", why: "The Office of the Information and Privacy Commissioner reviews and comments. It does not certify, approve or accredit AI systems." },
+  { claim: "\u201cCompliant with Canada's AI law\u201d", why: "There is no Canadian AI statute. The Artificial Intelligence and Data Act died on the Order Paper at prorogation on 6 January 2025 and has not been replaced." },
+  { claim: "\u201cIt's illegal to store Canadian data in the US\u201d", why: "False. PIPEDA expressly permits transfers for processing. We will not sell against a premise your own counsel can dismantle in one meeting." },
+  { claim: "\u201cNo hallucinations\u201d or \u201cguaranteed accurate\u201d", why: "Unprovable, and it would convert a known limitation of every language model into a contractual warranty." },
 ];
 
 export default function ConfidentialityPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Confidentiality"
-        title="What on-premises actually does for you — and what it doesn't."
+        sheet="Sheet C-01"
+        eyebrow="Containment"
+        title="What on-premises actually does — and what it doesn't."
         lede="This page is deliberately conservative. The whole proposition only works if every claim on it survives being read by your lawyer."
       />
 
       <Section>
         <Container>
           <div className="mx-auto max-w-3xl">
-            <Panel className="border-chinook-500/35 p-8 lg:p-10">
-              <Label>The honest framing</Label>
-              <blockquote className="mt-6 text-lg leading-relaxed text-base-100 lg:text-xl">
+            <div className="redline pl-6">
+              <Anno className="text-oxide-600">General note</Anno>
+              <blockquote className="mt-4 font-display text-2xl leading-snug font-medium text-ink-900 lg:text-[1.75rem]">
                 On-premises AI is not the only lawful option. It is the option
                 that removes the largest number of compliance obligations,
                 disclosures, third-party dependencies and residual foreign-law
                 exposures at once — and for some regulated workloads it is the
                 only one a professional can comfortably defend.
               </blockquote>
-            </Panel>
-            <p className="mt-8 text-base leading-relaxed text-base-300">
+            </div>
+            <p className="mt-8 text-base leading-relaxed text-ink-600">
               A great deal of AI marketing implies that sending data across the
               border is unlawful. It is not, and a buyer who acts on that advice
               is being badly served. What is true is narrower, and stronger: for
@@ -116,77 +101,83 @@ export default function ConfidentialityPage() {
         </Container>
       </Section>
 
-      <Section className="border-t border-base-700/60">
+      <Section className="border-t border-vellum-400 bg-vellum-100">
         <Container>
-          <SectionHeading
-            eyebrow="The controls"
+          <TitleBlock
+            eyebrow="Controls"
             title="How the architecture backs the claim."
           />
-          <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-base-600/60 bg-base-600/40 md:grid-cols-2 lg:grid-cols-3">
+          <dl className="mt-12 grid gap-x-14 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
             {controls.map((c) => (
-              <div key={c.title} className="bg-base-900 p-7">
-                <h3 className="text-sm font-semibold text-base-50">{c.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-base-300">
+              <div key={c.title} className="redline pl-5">
+                <dt className="font-display text-base font-semibold text-ink-900">
+                  {c.title}
+                </dt>
+                <dd className="mt-2 text-sm leading-relaxed text-ink-600">
                   {c.body}
-                </p>
+                </dd>
               </div>
             ))}
-          </div>
+          </dl>
         </Container>
       </Section>
 
-      <Section className="border-t border-base-700/60">
+      <Section className="border-t border-vellum-400">
         <Container>
-          <SectionHeading
-            eyebrow="The register"
+          <TitleBlock
+            sheet="Sheet C-02"
+            eyebrow="Applicable standards"
             title="Which rules apply to you."
             lede="Current as of 29 July 2026 and reviewed quarterly. This is general information, not legal advice."
           />
-          <Panel className="mt-14 overflow-x-auto p-6 lg:p-8">
+          <Sheet inset className="mt-12 overflow-x-auto p-6 lg:p-8">
             <table className="w-full min-w-[52rem] border-collapse text-left">
               <thead>
-                <tr className="border-b border-base-600/70">
-                  <th scope="col" className="label py-4 pr-6 font-normal">Regime</th>
-                  <th scope="col" className="label py-4 pr-6 font-normal">Who it binds</th>
-                  <th scope="col" className="label py-4 font-normal">What it means here</th>
+                <tr className="border-b-2 border-ink-800">
+                  <th scope="col" className="anno py-3 pr-6 font-normal">Regime</th>
+                  <th scope="col" className="anno py-3 pr-6 font-normal">Who it binds</th>
+                  <th scope="col" className="anno py-3 font-normal">What it means here</th>
                 </tr>
               </thead>
               <tbody>
                 {regimes.map((r) => (
-                  <tr key={r.regime} className="border-b border-base-700/60">
-                    <th scope="row" className="py-5 pr-6 align-top text-sm font-semibold whitespace-nowrap text-base-50">
+                  <tr key={r.regime} className="border-b border-vellum-300 align-top">
+                    <th scope="row" className="py-5 pr-6 font-display text-sm font-semibold whitespace-nowrap text-ink-900">
                       {r.regime}
                     </th>
-                    <td className="py-5 pr-6 align-top text-sm text-base-300">{r.applies}</td>
-                    <td className="py-5 align-top text-sm leading-relaxed text-base-300">{r.effect}</td>
+                    <td className="py-5 pr-6 text-sm text-ink-600">{r.applies}</td>
+                    <td className="py-5 text-sm leading-relaxed text-ink-600">{r.effect}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </Panel>
+          </Sheet>
         </Container>
       </Section>
 
       {/* The differentiator: publishing what we refuse to claim */}
-      <Section className="border-t border-base-700/60">
+      <Section className="border-t border-vellum-400 bg-vellum-100">
         <Container>
-          <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-            <SectionHeading
-              eyebrow="What we won't say"
+          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+            <TitleBlock
+              eyebrow="Deviations"
               title="Claims we refuse to make."
               lede="Published deliberately. If a vendor tells you any of the following, ask them to put it in the contract and watch what happens."
             />
-            <ul className="space-y-px overflow-hidden rounded-lg border border-base-600/60 bg-base-600/40">
+            <ul className="divide-y divide-vellum-300 border-y border-vellum-400">
               {cannotClaim.map((c) => (
-                <li key={c.claim} className="bg-base-900 p-6">
+                <li key={c.claim} className="py-5">
                   <div className="flex items-start gap-4">
-                    <svg viewBox="0 0 20 20" aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-chinook-500">
-                      <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
-                      <path d="M6.8 13.2l6.4-6.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                    </svg>
+                    <span aria-hidden className="mt-1 font-mono text-sm text-oxide-600">
+                      ✕
+                    </span>
                     <div>
-                      <h3 className="text-sm font-semibold text-base-50">{c.claim}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-base-300">{c.why}</p>
+                      <h3 className="font-display text-base font-semibold text-ink-900">
+                        {c.claim}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-ink-600">
+                        {c.why}
+                      </p>
                     </div>
                   </div>
                 </li>
@@ -196,21 +187,20 @@ export default function ConfidentialityPage() {
         </Container>
       </Section>
 
-      <Section className="border-t border-base-700/60">
+      <Section className="border-t border-vellum-400">
         <Container>
-          <Panel className="mx-auto max-w-3xl p-8">
-            <Label>Standing disclaimer</Label>
-            <Rule className="my-5" />
-            <p className="text-sm leading-relaxed text-base-300">
+          <Sheet className="mx-auto max-w-3xl p-7">
+            <Anno>Standing disclaimer</Anno>
+            <p className="mt-4 text-sm leading-relaxed text-ink-600">
               Everything on this page is general information, not legal advice.
               Compliance obligations rest with your organisation, and you should
               obtain your own advice. Statutory references were verified on{" "}
-              {brand.legalReviewDate} and are reviewed quarterly; this area of
-              law moved substantially between 2024 and 2026. Nothing here implies
+              {brand.legalReviewDate} and are reviewed quarterly; this area of law
+              moved substantially between 2024 and 2026. Nothing here implies
               endorsement by the Office of the Information and Privacy
               Commissioner, the Law Society of Alberta, OSFI, or any court.
             </p>
-          </Panel>
+          </Sheet>
         </Container>
       </Section>
 

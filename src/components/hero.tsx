@@ -1,102 +1,134 @@
 import { brand } from "@/content/brand";
-import { Button, Container, Label } from "@/components/ui";
+import { Anno, Button, Container } from "@/components/ui";
 
-const proofPoints = [
-  "Runs on hardware you own",
-  "No data leaves your network",
-  "Fixed cost, not per-token",
+/**
+ * Signature element. Every industrial machine in Alberta carries a
+ * stamped nameplate: model, serial, rating, origin. This company sells
+ * AI as owned capital equipment, so the hero *is* that plate — and the
+ * last row is the whole pitch.
+ */
+const plateRows = [
+  { k: "Model", v: "Workgroup / 64 GB" },
+  { k: "Serial", v: "BSK-0000-YYC" },
+  { k: "Rated", v: "1,070 W @ 120 V" },
+  { k: "Installed", v: "Your premises" },
+  { k: "Owner", v: "You" },
+  { k: "Egress", v: "None", accent: true },
 ] as const;
+
+function Nameplate() {
+  return (
+    <figure className="relative w-full max-w-sm">
+      <div className="nameplate relative px-7 py-6">
+        <span className="rivet top-2.5 left-2.5" />
+        <span className="rivet top-2.5 right-2.5" />
+        <span className="rivet bottom-2.5 left-2.5" />
+        <span className="rivet bottom-2.5 right-2.5" />
+
+        <div className="flex items-baseline justify-between gap-4 border-b border-white/12 pb-3">
+          <span className="engraved font-display text-base font-semibold tracking-wide">
+            {brand.name.toUpperCase()}
+          </span>
+          <span className="engraved-dim font-mono text-[0.5625rem] tracking-[0.18em]">
+            PRIVATE INFERENCE UNIT
+          </span>
+        </div>
+
+        <dl className="mt-4 space-y-2.5">
+          {plateRows.map((row, i) => (
+            <div
+              key={row.k}
+              className="etch-row flex items-baseline gap-3"
+              style={{ animationDelay: `${180 + i * 85}ms` }}
+            >
+              <dt className="engraved-dim w-20 shrink-0 font-mono text-[0.625rem] tracking-[0.14em] uppercase">
+                {row.k}
+              </dt>
+              <span
+                aria-hidden
+                className="h-px flex-1 bg-white/10"
+              />
+              <dd
+                className={`font-mono text-xs ${
+                  "accent" in row && row.accent
+                    ? "font-medium text-oxide-500"
+                    : "engraved"
+                }`}
+              >
+                {row.v}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <figcaption className="anno mt-3 text-center">
+        Fig. 1 — Representative unit
+      </figcaption>
+    </figure>
+  );
+}
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      {/* engineering grid, fading downward */}
+    <section className="relative overflow-hidden border-b border-vellum-400">
       <div
         aria-hidden
-        className="grid-rule mask-fade-b pointer-events-none absolute inset-0 opacity-[0.55]"
-      />
-      {/* the chinook arch on the horizon */}
-      <div
-        aria-hidden
-        className="chinook-arch pointer-events-none absolute inset-x-0 -bottom-1/4 h-[70%]"
-      />
-      {/* horizon line */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-chinook-500/45 to-transparent"
+        className="drafting-grid-lg mask-fade-b pointer-events-none absolute inset-0"
       />
 
-      <Container className="relative pt-20 pb-28 lg:pt-28 lg:pb-36">
-        <div className="max-w-4xl">
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-base-600/70 bg-base-900/60 px-3.5 py-1.5 backdrop-blur-sm">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-500" />
-            </span>
-            <span className="label text-base-300">
-              {brand.city}, {brand.regionCode} · Taking new clients
-            </span>
+      <Container className="relative py-16 lg:py-24">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+          <div>
+            <div className="flex items-center gap-3">
+              <Anno className="text-oxide-600">
+                {brand.city}, {brand.regionCode}
+              </Anno>
+              <span aria-hidden className="h-px w-8 bg-vellum-400" />
+              <Anno>Taking new clients</Anno>
+            </div>
+
+            <h1 className="mt-7 font-display text-[2.75rem] leading-[0.98] font-semibold sm:text-6xl lg:text-[4.5rem]">
+              The AI your business
+              <br />
+              needs, on hardware
+              <br />
+              <span className="text-oxide-600">you own.</span>
+            </h1>
+
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink-600">
+              We find the work your team shouldn&rsquo;t be doing by hand, build
+              the AI that does it, and install it in your building — so nothing
+              confidential ever leaves your network.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Button href="/contact">Book an assessment</Button>
+              <Button href="/#approach" variant="line">
+                See how it works
+              </Button>
+            </div>
           </div>
 
-          <h1 className="mt-8 text-[2.6rem] leading-[1.04] font-semibold sm:text-6xl lg:text-[4.25rem]">
-            The AI your business needs,
-            <br />
-            <span className="chinook-text">on hardware you own.</span>
-          </h1>
-
-          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-base-300 lg:text-xl">
-            We find the work your team shouldn&rsquo;t be doing by hand, build
-            the AI that does it, and run the whole thing inside your building
-            &mdash; so nothing confidential ever leaves your network.
-          </p>
-
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button href="/contact">Book an automation assessment</Button>
-            <Button href="/#approach" variant="secondary">
-              See how it works
-            </Button>
+          <div className="flex justify-center lg:justify-end">
+            <Nameplate />
           </div>
-
-          <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3">
-            {proofPoints.map((point) => (
-              <li key={point} className="flex items-center gap-2.5">
-                <svg
-                  viewBox="0 0 16 16"
-                  className="h-4 w-4 shrink-0 text-signal-400"
-                  aria-hidden
-                >
-                  <path
-                    d="M3.5 8.5l3 3 6-6.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="text-sm text-base-200">{point}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </Container>
     </section>
   );
 }
 
-/** Narrow band under the hero that frames who this is for. */
+/** Ruled strip naming the trades this is built for. */
 export function AudienceBar({ items }: { items: readonly string[] }) {
   return (
-    <div className="border-y border-base-700/60 bg-base-900/40">
-      <Container className="py-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10">
-          <Label className="shrink-0">Built for</Label>
-          <ul className="flex flex-wrap gap-x-7 gap-y-2">
+    <div className="border-b border-vellum-400 bg-vellum-100">
+      <Container className="py-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-8">
+          <Anno className="shrink-0 text-oxide-600">Built for</Anno>
+          <ul className="flex flex-wrap gap-x-6 gap-y-1.5">
             {items.map((item) => (
-              <li
-                key={item}
-                className="text-sm whitespace-nowrap text-base-300"
-              >
+              <li key={item} className="text-sm text-ink-600">
                 {item}
               </li>
             ))}
