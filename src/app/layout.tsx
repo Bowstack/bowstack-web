@@ -25,13 +25,15 @@ export const metadata: Metadata = {
   },
   description: brand.blurb,
   keywords: [
-    "private AI Calgary",
+    ...brand.seoRegions.flatMap((r) => [
+      `private AI ${r}`,
+      `AI automation ${r}`,
+      `GPU server ${r}`,
+      `self-hosted AI ${r}`,
+    ]),
     "on-premise AI",
     "local LLM deployment",
-    "AI automation Calgary",
-    "self-hosted AI Alberta",
     "AI compliance Canada",
-    "GPU server Calgary",
   ],
   authors: [{ name: brand.founder.name }],
   openGraph: {

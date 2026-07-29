@@ -20,10 +20,23 @@ export const brand = {
   blurb:
     "We find the work your business can automate, build the AI that does it, and run it on hardware you own — so nothing confidential ever leaves your network.",
 
+  /**
+   * Home market. The brand name is deliberately NOT geographic, so opening a
+   * second market is a change to these four fields plus `serviceArea` and
+   * `seoRegions` below — not a rebrand. Statutory content on /confidentiality
+   * is Alberta-specific by nature and should be ADDED to, not replaced, when
+   * a new province comes online.
+   */
   city: "Calgary",
   region: "Alberta",
   regionCode: "AB",
   country: "Canada",
+
+  /** Phrase used wherever coverage is described in prose. */
+  serviceArea: "the Calgary region",
+
+  /** Feeds metadata keywords. Extend per market rather than rewriting copy. */
+  seoRegions: ["Calgary", "Alberta"],
 
   founder: {
     name: "Yassin Soliman",

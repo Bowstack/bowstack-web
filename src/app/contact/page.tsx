@@ -64,8 +64,8 @@ export default function ContactPage() {
                   {brand.contact.email}
                 </a>
                 <p className="text-sm text-base-400">
-                  {brand.city}, {brand.regionCode} — on-site across the Calgary
-                  region.
+                  {brand.city}, {brand.regionCode} — on-site across{" "}
+                  {brand.serviceArea}.
                 </p>
               </div>
             </div>
