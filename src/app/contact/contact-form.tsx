@@ -4,11 +4,11 @@ import { useState } from "react";
 import { brand } from "@/content/brand";
 
 const interests = [
-  "Private AI Assessment",
-  "First Workflow build",
-  "Hardware specification only",
-  "Confidential AI Briefing",
-  "Not sure yet",
+  "Book a 15-minute demo",
+  "Start a 30-day pilot",
+  "Multi-shop rollout",
+  "Question about data handling",
+  "Something else",
 ] as const;
 
 const fieldClass =

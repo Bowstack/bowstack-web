@@ -7,21 +7,21 @@ import { ContactForm } from "./contact-form";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Book a Private AI Assessment, or bring a specific question about keeping AI work inside your building.",
+    "Book a 15-minute demo with one of your own insurer PDFs, or ask how Bowstack handles your data.",
 };
 
 const expect = [
   {
-    t: "A conversation, not a pitch deck",
-    d: "Thirty minutes on what your team actually spends its week doing. If there's nothing worth automating, that is a fine outcome and we'll say so.",
+    t: "A demo, not a pitch deck",
+    d: "We run it on a PDF you supply, live. You will see exactly what it gets right and what it flags for review.",
   },
   {
-    t: "A straight answer on cost",
-    d: "Including when a cloud subscription is the better buy. We publish hardware prices and we don't mark hardware up, so there's no incentive to oversize you.",
+    t: "A straight answer on fit",
+    d: "If your carriers already send structured files, or your volume is too low for the maths to work, we will say so.",
   },
   {
-    t: "No obligation to buy hardware",
-    d: "Plenty of good outcomes involve no machine at all. The assessment is written to be useful even if you never engage us again.",
+    t: "No pressure to commit",
+    d: "The pilot is month to month. If it is not earning its keep after thirty days, walk away.",
   },
 ];
 
@@ -30,8 +30,8 @@ export default function ContactPage() {
     <>
       <PageHeader
         eyebrow="Request for information"
-        title="Start with a conversation."
-        lede="Tell us what your team spends its week on, or bring the specific obligation that's keeping AI out of your business."
+        title="Bring one of your own PDFs."
+        lede="Fifteen minutes on your document and your Mitchell. If it does not handle your carriers well, that is worth finding out early."
       />
 
       <Section>

@@ -39,14 +39,13 @@ export const metadata: Metadata = {
   description: brand.blurb,
   keywords: [
     ...brand.seoRegions.flatMap((r) => [
-      `private AI ${r}`,
-      `AI automation ${r}`,
-      `GPU server ${r}`,
-      `self-hosted AI ${r}`,
+      `collision estimate software ${r}`,
+      `auto body shop software ${r}`,
     ]),
-    "on-premise AI",
-    "local LLM deployment",
-    "AI compliance Canada",
+    "collision repair PDF import",
+    "estimate data entry automation",
+    "body shop estimate import",
+    "collision claim intake automation",
   ],
   authors: [{ name: brand.founder.name }],
   openGraph: {

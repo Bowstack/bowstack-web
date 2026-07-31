@@ -53,7 +53,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link href="/contact" className="text-sm text-ink-600 hover:text-ink-900">
-                  Book an assessment
+                  Book a demo
                 </Link>
               </li>
               <li>

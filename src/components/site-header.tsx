@@ -36,7 +36,7 @@ export function SiteHeader() {
           href="/contact"
           className="btn btn-solid hidden lg:inline-flex"
         >
-          Book an assessment
+          Book a demo
         </Link>
 
         <button
@@ -74,7 +74,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="btn btn-solid mt-5"
             >
-              Book an assessment
+              Book a demo
             </Link>
             <a
               href={`mailto:${brand.contact.email}`}

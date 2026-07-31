@@ -1,26 +1,24 @@
 import { Hero, AudienceBar } from "@/components/hero";
 import {
   ProblemSection,
-  ApproachSection,
-  ServicesSection,
+  HowSection,
+  FillsSection,
+  DataSection,
+  PricingSection,
   FaqSection,
   FounderSection,
   CtaSection,
+  NonAffiliation,
 } from "@/components/sections";
-import {
-  HardwareSection,
-  ConfidentialitySection,
-  PricingSection,
-} from "@/components/specialized";
 import { brand } from "@/content/brand";
 import {
   audience,
   problems,
   steps,
-  services,
+  fills,
   controls,
-  tiers,
   packages,
+  pricingNote,
   faqs,
   founderNote,
 } from "@/content/site";
@@ -31,11 +29,10 @@ export default function Home() {
       <Hero />
       <AudienceBar items={audience} />
       <ProblemSection items={problems} />
-      <ApproachSection steps={steps} />
-      <ServicesSection services={services} />
-      <HardwareSection tiers={tiers} />
-      <ConfidentialitySection controls={controls} />
-      <PricingSection packages={packages} />
+      <HowSection steps={steps} />
+      <FillsSection groups={fills} />
+      <DataSection controls={controls} />
+      <PricingSection packages={packages} note={pricingNote} />
       <FaqSection faqs={faqs} />
       <FounderSection
         name={brand.founder.name}
@@ -43,12 +40,13 @@ export default function Home() {
         paragraphs={founderNote}
       />
       <CtaSection
-        eyebrow="Start here"
-        title="Find out what you could automate."
-        body="Three weeks, a fixed fee, and a costed plan at the end of it. If the honest answer is that you shouldn't do this, that's what the report will say."
-        primary={{ href: "/contact", label: "Book an assessment" }}
-        secondary={{ href: "/hardware", label: "See the hardware first" }}
+        eyebrow="Next step"
+        title="Bring one of your own PDFs."
+        body="Fifteen minutes, your document, your Mitchell. If it does not handle your carriers well, that is a useful thing for both of us to find out early."
+        primary={{ href: "/contact", label: "Book a demo" }}
+        secondary={{ href: "/security", label: "How your data is handled" }}
       />
+      <NonAffiliation />
     </>
   );
 }

@@ -1,68 +1,63 @@
 /**
  * Single source of truth for brand identity.
- * Every name/domain/contact string on the site resolves from here,
- * so a rename is a one-file edit.
  *
- * Name selected 2026-07-29 against research/08-name-availability.md:
- * zero CIPO trademark records, zero federal corporations, .ca/.ai/.io
- * unregistered (verified via CIRA and IdentityDigital RDAP), GitHub org free.
+ * Positioning note (2026-07-31): Bowstack is one brand covering both the
+ * company and its first product. The company thesis is workflow automation
+ * for vertical software that has no usable API; collision repair is the
+ * beachhead, not the definition. Keep company-level copy free of
+ * collision-specific language so a second vertical does not require a rebrand.
  */
 
 export const brand = {
   name: "Bowstack",
-  short: "Bow",
+  short: "Bowstack",
   legal: "Bowstack Technologies Ltd.",
   domain: "bowstack.ca",
   url: "https://bowstack.ca",
 
-  tagline: "AI that never leaves the building.",
+  tagline: "Start the repair, not the re-keying.",
 
   blurb:
-    "We find the work your business can automate, build the AI that does it, and run it on hardware you own — so nothing confidential ever leaves your network.",
+    "Bowstack turns the insurer PDF you already received into a review-ready Mitchell Connect draft — contact, vehicle, insurance and estimate line items. You review every field and click Save yourself.",
 
-  /**
-   * Home market. The brand name is deliberately NOT geographic, so opening a
-   * second market is a change to these four fields plus `serviceArea` and
-   * `seoRegions` below — not a rebrand. Statutory content on /confidentiality
-   * is Alberta-specific by nature and should be ADDED to, not replaced, when
-   * a new province comes online.
-   */
+  /** Company-level line. Survives a second vertical. */
+  companyLine:
+    "Workflow automation for the software your industry actually runs on.",
+
   city: "Calgary",
   region: "Alberta",
   regionCode: "AB",
   country: "Canada",
 
-  /** Phrase used wherever coverage is described in prose. */
-  serviceArea: "the Calgary region",
-
-  /** Feeds metadata keywords. Extend per market rather than rewriting copy. */
-  seoRegions: ["Calgary", "Alberta"],
+  serviceArea: "Alberta",
+  seoRegions: ["Calgary", "Alberta", "Canada"],
 
   founder: {
     name: "Yassin Soliman",
-    role: "Founder & Principal Engineer",
+    role: "Founder",
     github: "https://github.com/yassinsolim",
   },
 
   contact: {
     email: "info@bowstack.ca",
-    /** Placeholder — replace before launch. */
     phone: "",
   },
 
   social: {
-    github: "https://github.com/yassinsolim",
+    github: "https://github.com/Bowstack",
     linkedin: "",
   },
 
-  /** Displayed with legal statements. Every regulatory fact is dated. */
-  legalReviewDate: "29 July 2026",
+  /** Required wherever Mitchell is named. Not optional. */
+  nonAffiliation:
+    "Bowstack is independent software. Not affiliated with, endorsed by, or sponsored by Mitchell International, Inc. or Enlyte. \u201cMitchell Connect\u201d is referenced only to state what Bowstack is compatible with.",
+
+  legalReviewDate: "31 July 2026",
 } as const;
 
 export const nav = [
-  { label: "Approach", href: "/#approach" },
-  { label: "What we build", href: "/#services" },
-  { label: "Hardware", href: "/hardware" },
-  { label: "Confidentiality", href: "/confidentiality" },
-  { label: "Engagements", href: "/#pricing" },
+  { label: "How it works", href: "/#how" },
+  { label: "What it fills", href: "/#fills" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Your data", href: "/security" },
 ] as const;
