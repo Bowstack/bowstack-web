@@ -45,7 +45,7 @@ export const brand = {
   },
 
   contact: {
-    email: "hello@bowstack.ca",
+    email: "info@bowstack.ca",
     /** Placeholder — replace before launch. */
     phone: "",
   },
