@@ -57,6 +57,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/privacy" className="text-sm text-ink-600 hover:text-ink-900">
+                  Privacy
+                </Link>
+              </li>
+              <li>
                 <a href={brand.social.github} className="text-sm text-ink-600 hover:text-ink-900">
                   GitHub
                 </a>
