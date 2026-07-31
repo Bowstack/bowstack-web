@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { NonAffiliation } from "@/components/sections";
 import { Anno, Container, Section, Sheet } from "@/components/ui";
 import { brand } from "@/content/brand";
 import { ContactForm } from "./contact-form";
@@ -75,6 +76,7 @@ export default function ContactPage() {
           </div>
         </Container>
       </Section>
+      <NonAffiliation />
     </>
   );
 }
