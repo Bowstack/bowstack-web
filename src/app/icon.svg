@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Bowstack">
+  <title>Bowstack</title>
+  <!--
+    Small-size variant of the brand mark. The full mark at
+    public/brand/bowstack-mark.svg carries mounting holes and lighter
+    bars; both vanish below about 32px. Here the bars are heavier and the
+    padding is tighter so the three-unit stack still reads at 16px.
+  -->
+  <rect width="512" height="512" rx="72" fill="#E9EBE5"/>
+  <rect x="72" y="96"  width="368" height="96" rx="10" fill="#A8402A"/>
+  <rect x="72" y="216" width="368" height="96" rx="10" fill="#1D2229"/>
+  <rect x="72" y="336" width="368" height="96" rx="10" fill="#1D2229"/>
+</svg>
