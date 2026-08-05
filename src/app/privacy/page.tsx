@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  *  - Describe only what ships today. No future provider migrations.
  */
 
-const EFFECTIVE = "30 July 2026";
+const EFFECTIVE = "5 August 2026";
 
 type Block = { h: string; body: readonly (string | readonly string[])[] };
 
@@ -46,7 +46,8 @@ const sections: readonly Block[] = [
       "This is the distinction that matters most, so it is stated plainly.",
       [
         "The PDF file itself never leaves your computer. Text is extracted in the browser using PDF.js, and the PDF bytes stay in the content script.",
-        "The extracted text does leave. Selecting a PDF sends that text — not the file — through the Bowstack AI service running on Google Cloud Run, to OpenAI, for parsing into structured fields.",
+        "Before the PDF picker opens, Bowstack displays an in-product disclosure and requires you to choose whether to continue.",
+        "After you acknowledge that disclosure and select a PDF, the extracted text does leave. Bowstack sends that text — not the file — through the Bowstack AI service running on Google Cloud Run, to OpenAI, for parsing into structured fields.",
       ],
       "The service processes the text transiently. It does not intentionally log request bodies or parsed results, does not persist claim content, and sets store: false on the API request. Infrastructure access logs may retain request metadata such as timestamp, status and latency. The OpenAI API key is held in Google Secret Manager and is never returned to the extension.",
       "OpenAI states that data sent to its API is not used to train its models unless the API organization opts in. Bowstack has not opted in. OpenAI's default abuse-monitoring logs may retain customer content for up to 30 days unless the project is approved and configured for Zero Data Retention.",
@@ -96,7 +97,7 @@ const sections: readonly Block[] = [
   {
     h: "Chrome Web Store Limited Use disclosure",
     body: [
-      "Bowstack's use of information received from Chrome APIs and from the Mitchell Connect page adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements. Data is used only to provide the PDF review, customer-intake queue and form-filling features you invoke. Transfer to OpenAI occurs only to provide field extraction, after you select a PDF.",
+      "Bowstack's use of information received from Chrome APIs and from the Mitchell Connect page adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements. Data is used only to provide the PDF review, customer-intake queue and form-filling features you invoke. Transfer to OpenAI occurs only to provide field extraction, after you acknowledge the disclosure and select a PDF.",
     ],
   },
   {
