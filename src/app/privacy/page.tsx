@@ -17,12 +17,13 @@ export const metadata: Metadata = {
  * Ported from PRIVACY.md in the extension repo. Keep the two in sync and do
  * not soften the specifics — the accuracy is the point:
  *  - PDF bytes stay local; EXTRACTED TEXT does leave. Never blur that.
- *  - Name every recipient: Cloud Run, OpenAI, Firestore (Montréal).
+ *  - Name every recipient: Cloud Run, OpenAI, Firestore (Montréal), Vercel,
+ *    Resend, and Cloudflare Email Routing.
  *  - Keep the 30-day OpenAI abuse-monitoring caveat.
  *  - Describe only what ships today. No future provider migrations.
  */
 
-const EFFECTIVE = "5 August 2026";
+const EFFECTIVE = "20 August 2026";
 
 type Block = { h: string; body: readonly (string | readonly string[])[] };
 
@@ -51,13 +52,14 @@ const sections: readonly Block[] = [
       ],
       "The service processes the text transiently. It does not intentionally log request bodies or parsed results, does not persist claim content, and sets store: false on the API request. Infrastructure access logs may retain request metadata such as timestamp, status and latency. The OpenAI API key is held in Google Secret Manager and is never returned to the extension.",
       "OpenAI states that data sent to its API is not used to train its models unless the API organization opts in. Bowstack has not opted in. OpenAI's default abuse-monitoring logs may retain customer content for up to 30 days unless the project is approved and configured for Zero Data Retention.",
+      "If you choose Report a problem, the extension opens Bowstack's contact page with only a fixed Bowstack extension source marker, its version, browser family and major version, and operating-system family in the URL fragment. A URL fragment is not sent with the page request. The contact page displays those values for review and includes them only if you submit the form. The report never automatically includes a PDF, extracted claim text, customer fields, filenames, claim or vehicle identifiers, Mitchell URLs, page text, screenshots, credentials, access codes, or console logs.",
     ],
   },
   {
     h: "What the extension does not do",
     body: [
       [
-        "No analytics or telemetry of any kind.",
+        "No analytics, automatic telemetry, or background problem reporting.",
         "No advertising, profiling, or remote OCR.",
         "No cookie access and no network interception.",
         "No access to your Mitchell credentials. The extension works only inside the session you are already signed in to.",
@@ -83,13 +85,24 @@ const sections: readonly Block[] = [
     ],
   },
   {
+    h: "Contact and problem reports",
+    body: [
+      "The contact form is optional and user-initiated. It sends the name, company, reply email, selected topic and message you enter. When opened from Report a problem in the extension, it may also send the small diagnostic bundle displayed on the form.",
+      "Vercel hosts the website and contact endpoint and applies an IP-based rate limit to that endpoint to prevent abuse. Resend delivers the message to Bowstack's info@bowstack.ca address, and Cloudflare Email Routing receives mail for that domain and forwards it to Bowstack's configured mailbox. These services may process normal request or mail-delivery metadata, including the source IP used for the rate limit. Bowstack does not intentionally log the form payload or store it in a website database; the resulting email is retained in Bowstack's mailbox as needed to answer and track the request.",
+      "Do not place customer PDFs, claim text, credentials, access codes, or other personal or insurance information in a contact or problem report.",
+    ],
+  },
+  {
     h: "Parties your data may be shared with",
     body: [
-      "In full, and no others:",
+      "Depending on the features you choose to use:",
       [
         "Google Cloud Run — hosts the Bowstack AI service that relays extracted text.",
         "OpenAI — performs the extraction from the text.",
         "Google Cloud Firestore (Montréal, Canada) — stores intake records, only where the optional intake feature is enabled.",
+        "Vercel — hosts bowstack.ca and processes contact-form requests.",
+        "Resend — delivers contact and problem-report messages to Bowstack.",
+        "Cloudflare Email Routing — receives mail for bowstack.ca and routes it to Bowstack's configured mailbox.",
       ],
       "Data is not sold, not used for advertising or profiling, and not made available for human review by the developer.",
     ],
