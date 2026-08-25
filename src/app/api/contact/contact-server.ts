@@ -143,27 +143,43 @@ function hasSameOrigin(request: Request): boolean {
 }
 
 function formatMessage(submission: ContactSubmission): string {
+  const submittedAt = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Edmonton",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  }).format(new Date());
   const diagnostics = submission.diagnostics;
   const diagnosticLines = diagnostics
     ? [
         "",
-        "Extension diagnostics (reviewed by sender):",
-        "Source: Bowstack extension",
+        "EXTENSION DIAGNOSTICS",
+        "Reviewed by sender",
         `Version: ${diagnostics.extensionVersion}`,
         `Browser: ${diagnostics.browserFamily} ${diagnostics.browserMajor || "Unknown"}`,
         `Platform: ${diagnostics.platform}`,
       ]
-    : ["", "Extension diagnostics: Not provided"];
+    : [];
 
   return [
+    "NEW WEBSITE ENQUIRY",
+    "",
+    submission.interest,
+    "",
+    "CONTACT",
     `Name: ${submission.name}`,
     `Company: ${submission.company || "Not provided"}`,
     `Email: ${submission.email}`,
-    `Interested in: ${submission.interest}`,
-    `Submitted: ${new Date().toISOString()}`,
     "",
-    "Message:",
+    "MESSAGE",
     submission.message,
+    "",
+    "DETAILS",
+    `Submitted: ${submittedAt}`,
+    "Source: bowstack.ca/contact",
     ...diagnosticLines,
   ].join("\n");
 }
@@ -233,7 +249,7 @@ export async function handleContactPost(request: Request): Promise<Response> {
         from,
         to: [CONTACT_RECIPIENT],
         reply_to: submission.email,
-        subject: `Bowstack website: ${submission.interest}`,
+        subject: `New website enquiry: ${submission.interest}`,
         text: formatMessage(submission),
       }),
       cache: "no-store",

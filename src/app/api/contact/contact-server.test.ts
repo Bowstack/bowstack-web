@@ -127,8 +127,30 @@ describe("contact delivery", () => {
     assert.equal(outboundHeaders?.get("Idempotency-Key"), `contact/${submissionId}`);
     assert.deepEqual(outboundBody?.to, ["info@bowstack.ca"]);
     assert.equal(outboundBody?.reply_to, "test@example.com");
-    assert.equal(typeof outboundBody?.text, "string");
+    assert.equal(
+      outboundBody?.subject,
+      "New website enquiry: Report a Bowstack problem",
+    );
+    assert.match(
+      String(outboundBody?.text),
+      /^NEW WEBSITE ENQUIRY\n\nReport a Bowstack problem\n\nCONTACT\nName: Synthetic Website Test\nCompany: Bowstack\nEmail: test@example\.com\n\nMESSAGE\nSynthetic route validation only\.\n\nDETAILS\nSubmitted: .+ (?:MST|MDT)\nSource: bowstack\.ca\/contact\n\nEXTENSION DIAGNOSTICS\nReviewed by sender\nVersion: 0\.1\.44\nBrowser: Chrome 140\nPlatform: Windows$/,
+    );
     assert.equal("html" in (outboundBody ?? {}), false);
+
+    const noDiagnosticsResponse = await handleContactPost(
+      requestFor(
+        validSubmission({
+          diagnostics: null,
+          submissionId: "a84f8967-12f4-49ac-bb2d-8ba5b4ad46a8",
+        }),
+      ),
+    );
+
+    assert.equal(noDiagnosticsResponse.status, 200);
+    assert.equal(
+      String(outboundBody?.text).includes("EXTENSION DIAGNOSTICS"),
+      false,
+    );
   });
 
   it("rejects a malformed successful provider response", async () => {
