@@ -18,8 +18,8 @@ export const metadata: Metadata = {
  * not soften the specifics — the accuracy is the point:
  *  - PDF bytes stay local; EXTRACTED TEXT does leave. Never blur that.
  *  - Name every recipient: Cloud Run, the Bowstack-controlled computer and the
- *    Tailscale tunnel to it, OpenAI (fallback), Firestore (Montréal), Vercel,
- *    Resend, and Cloudflare Email Routing.
+ *    Tailscale tunnel to it, OpenAI (fallback), Discord (error and report
+ *    summaries), Firestore (Montréal), Vercel, Resend, and Cloudflare Email Routing.
  *  - Keep the 30-day OpenAI abuse-monitoring caveat.
  *  - Describe only what ships today. No future provider migrations.
  */
@@ -54,14 +54,15 @@ const sections: readonly Block[] = [
       ],
       "The service processes the text transiently. It does not intentionally log request bodies or parsed results, does not persist claim content, and sets store: false on OpenAI requests. The Bowstack-controlled computer processes the text in memory, does not store it, and logs only each request's route, model name, status and duration. Before any text goes to OpenAI, the service replaces detected labelled direct identifiers with per-request stand-ins and restores them only after the response returns. Infrastructure access logs may retain request metadata such as timestamp, status and latency. The OpenAI API key and the tunnel credential are held in Google Secret Manager and are never returned to the extension.",
       "OpenAI states that data sent to its API is not used to train its models unless the API organization opts in. Bowstack has not opted in. OpenAI's default abuse-monitoring logs may retain customer content for up to 30 days unless the project is approved and configured for Zero Data Retention.",
-      "If you choose Report a problem, the extension opens Bowstack's contact page with only a fixed Bowstack extension source marker, its version, browser family and major version, and operating-system family in the URL fragment. A URL fragment is not sent with the page request. The contact page displays those values for review and includes them only if you submit the form. The report never automatically includes a PDF, extracted claim text, customer fields, filenames, claim or vehicle identifiers, Mitchell URLs, page text, screenshots, credentials, access codes, or console logs.",
+      "When a Bowstack action fails — reading a PDF, parsing, estimate staging, customer intake or extension messaging — the extension automatically sends an error report to the Bowstack service so the problem can be fixed. It contains only the failed action's name, a fixed error code, a short Bowstack request ID, the extension version, browser family and major version, operating-system family, an identifier-free page type, and up to 10 recent Bowstack action steps from the same tab. It never includes a PDF, extracted claim text, customer fields, filenames, error message text, Mitchell URLs or identifiers, page text, screenshots, credentials or access codes. The service rejects anything outside that fixed vocabulary, keeps accepted reports in private logs for 30 days, and posts a summary to Bowstack's private Discord channel.",
+      "If you choose Report a problem in the extension popup, nothing is sent until you select Send report. The form accepts only fixed area, activity, symptom and frequency choices, and sends them with the same kind of identifier-free diagnostics (up to 40 recent action steps) to the Bowstack service, which stores the report for 30 days.",
     ],
   },
   {
     h: "What the extension does not do",
     body: [
       [
-        "No analytics, automatic telemetry, or background problem reporting.",
+        "No analytics or usage telemetry. The only automatic diagnostics are the error reports described above.",
         "No advertising, profiling, or remote OCR.",
         "No cookie access and no network interception.",
         "No access to your Mitchell credentials. The extension works only inside the session you are already signed in to.",
@@ -103,12 +104,13 @@ const sections: readonly Block[] = [
         "A Bowstack-controlled computer — runs the AI model that performs the extraction first.",
         "Tailscale — carries the encrypted tunnel to that computer; the encryption ends on the computer, so Tailscale relays only encrypted traffic.",
         "OpenAI — performs the extraction when the Bowstack-controlled computer cannot.",
+        "Discord — delivers identifier-free error and problem-report summaries to Bowstack's private channel.",
         "Google Cloud Firestore (Montréal, Canada) — stores intake records, only where the optional intake feature is enabled.",
         "Vercel — hosts bowstack.ca and processes contact-form requests.",
         "Resend — delivers contact and problem-report messages to Bowstack.",
         "Cloudflare Email Routing — receives mail for bowstack.ca and routes it to Bowstack's configured mailbox.",
       ],
-      "Data is not sold, not used for advertising or profiling, and not made available for human review by the developer.",
+      "Data is not sold or used for advertising or profiling. Document content is not made available for human review by the developer; only the identifier-free error and problem-report diagnostics described above are reviewed.",
     ],
   },
   {
