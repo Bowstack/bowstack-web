@@ -17,13 +17,14 @@ export const metadata: Metadata = {
  * Ported from PRIVACY.md in the extension repo. Keep the two in sync and do
  * not soften the specifics — the accuracy is the point:
  *  - PDF bytes stay local; EXTRACTED TEXT does leave. Never blur that.
- *  - Name every recipient: Cloud Run, OpenAI, Firestore (Montréal), Vercel,
+ *  - Name every recipient: Cloud Run, the Bowstack-controlled computer and the
+ *    Tailscale tunnel to it, OpenAI (fallback), Firestore (Montréal), Vercel,
  *    Resend, and Cloudflare Email Routing.
  *  - Keep the 30-day OpenAI abuse-monitoring caveat.
  *  - Describe only what ships today. No future provider migrations.
  */
 
-const EFFECTIVE = "20 August 2026";
+const EFFECTIVE = "29 September 2026";
 
 type Block = { h: string; body: readonly (string | readonly string[])[] };
 
@@ -48,9 +49,10 @@ const sections: readonly Block[] = [
       [
         "The PDF file itself never leaves your computer. Text is extracted in the browser using PDF.js, and the PDF bytes stay in the content script.",
         "Before the PDF picker opens, Bowstack displays an in-product disclosure and requires you to choose whether to continue.",
-        "After you acknowledge that disclosure and select a PDF, the extracted text does leave. Bowstack sends that text — not the file — through the Bowstack AI service running on Google Cloud Run, to OpenAI, for parsing into structured fields.",
+        "After you acknowledge that disclosure and select a PDF, the extracted text does leave. Bowstack sends that text — not the file — to the Bowstack AI service running on Google Cloud Run, which first passes it to an AI model running on a Bowstack-controlled computer for parsing into structured fields. That hop uses an authenticated, TLS-encrypted Tailscale Funnel tunnel whose encryption ends on that computer.",
+        "If that computer is off, too slow, outside its configured hours, or cannot return a complete, verified result, the service sends the text — or only the unfinished part of an estimate — to OpenAI instead.",
       ],
-      "The service processes the text transiently. It does not intentionally log request bodies or parsed results, does not persist claim content, and sets store: false on the API request. Infrastructure access logs may retain request metadata such as timestamp, status and latency. The OpenAI API key is held in Google Secret Manager and is never returned to the extension.",
+      "The service processes the text transiently. It does not intentionally log request bodies or parsed results, does not persist claim content, and sets store: false on OpenAI requests. The Bowstack-controlled computer processes the text in memory, does not store it, and logs only each request's route, model name, status and duration. Before any text goes to OpenAI, the service replaces detected labelled direct identifiers with per-request stand-ins and restores them only after the response returns. Infrastructure access logs may retain request metadata such as timestamp, status and latency. The OpenAI API key and the tunnel credential are held in Google Secret Manager and are never returned to the extension.",
       "OpenAI states that data sent to its API is not used to train its models unless the API organization opts in. Bowstack has not opted in. OpenAI's default abuse-monitoring logs may retain customer content for up to 30 days unless the project is approved and configured for Zero Data Retention.",
       "If you choose Report a problem, the extension opens Bowstack's contact page with only a fixed Bowstack extension source marker, its version, browser family and major version, and operating-system family in the URL fragment. A URL fragment is not sent with the page request. The contact page displays those values for review and includes them only if you submit the form. The report never automatically includes a PDF, extracted claim text, customer fields, filenames, claim or vehicle identifiers, Mitchell URLs, page text, screenshots, credentials, access codes, or console logs.",
     ],
@@ -98,7 +100,9 @@ const sections: readonly Block[] = [
       "Depending on the features you choose to use:",
       [
         "Google Cloud Run — hosts the Bowstack AI service that relays extracted text.",
-        "OpenAI — performs the extraction from the text.",
+        "A Bowstack-controlled computer — runs the AI model that performs the extraction first.",
+        "Tailscale — carries the encrypted tunnel to that computer; the encryption ends on the computer, so Tailscale relays only encrypted traffic.",
+        "OpenAI — performs the extraction when the Bowstack-controlled computer cannot.",
         "Google Cloud Firestore (Montréal, Canada) — stores intake records, only where the optional intake feature is enabled.",
         "Vercel — hosts bowstack.ca and processes contact-form requests.",
         "Resend — delivers contact and problem-report messages to Bowstack.",
@@ -110,14 +114,14 @@ const sections: readonly Block[] = [
   {
     h: "Chrome Web Store Limited Use disclosure",
     body: [
-      "Bowstack's use of information received from Chrome APIs and from the Mitchell Connect page adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements. Data is used only to provide the PDF review, customer-intake queue and form-filling features you invoke. Transfer to OpenAI occurs only to provide field extraction, after you acknowledge the disclosure and select a PDF.",
+      "Bowstack's use of information received from Chrome APIs and from the Mitchell Connect page adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements. Data is used only to provide the PDF review, customer-intake queue and form-filling features you invoke. Parsing on the Bowstack-controlled computer, and transfer to OpenAI when that computer cannot finish, occur only to provide field extraction, after you acknowledge the disclosure and select a PDF.",
     ],
   },
   {
     h: "Your shop's own obligations",
     body: [
       "Collision documents contain personal and insurance information, and your shop — not Bowstack — is the organisation accountable for it under applicable privacy law. Use production documents only where authorised, follow your own retention and access policies, and confirm that use of browser automation is permitted under your Mitchell agreement.",
-      "Because extracted text is processed outside Canada under the current configuration, Alberta shops should review their obligations under the Personal Information Protection Act, including the s.13.1 notification duty and the s.6(2) requirement that written policies name the countries involved. This is general information, not legal advice; obtain your own.",
+      "Because extracted text can be processed outside Canada when the OpenAI fallback is used, Alberta shops should review their obligations under the Personal Information Protection Act, including the s.13.1 notification duty and the s.6(2) requirement that written policies name the countries involved. This is general information, not legal advice; obtain your own.",
     ],
   },
   {
