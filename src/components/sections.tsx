@@ -8,7 +8,7 @@ import {
   TitleBlock,
 } from "@/components/ui";
 import { brand } from "@/content/brand";
-import type { ProblemItem, Step, FillGroup, Control, Package, Faq } from "@/content/site";
+import type { ProblemItem, Step, FillGroup, Control, Pricing, Faq } from "@/content/site";
 
 /* ------------------------------------------------------------------ */
 
@@ -152,76 +152,24 @@ export function DataSection({ controls }: { controls: readonly Control[] }) {
 
 /* ------------------------------------------------------------------ */
 
-export function PricingSection({
-  packages,
-  note,
-}: {
-  packages: readonly Package[];
-  note: string;
-}) {
+export function PricingSection({ content }: { content: Pricing }) {
   return (
     <Section id="pricing" className="border-t border-vellum-400">
       <Container>
-        <TitleBlock
-          eyebrow="Pricing"
-          title="Per location. Month to month."
-          lede="Priced where the claims are keyed. No per-seat counting, no annual lock-in, no setup fee."
-        />
-        <div className="mt-12 grid gap-px border border-vellum-400 bg-vellum-400 lg:grid-cols-3">
-          {packages.map((pkg) => (
-            <div
-              key={pkg.name}
-              className={`relative flex flex-col p-7 lg:p-8 ${
-                pkg.featured ? "bg-vellum-50" : "bg-vellum-100"
-              }`}
-            >
-              {pkg.featured && (
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-0.5 bg-oxide-600"
-                />
-              )}
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="font-display text-lg font-semibold">{pkg.name}</h3>
-                {pkg.featured && <Anno className="text-oxide-600">Start here</Anno>}
-              </div>
-              <p className="mt-2.5 text-sm leading-relaxed text-ink-600">
-                {pkg.summary}
-              </p>
-              <div className="mt-7 border-t border-vellum-300 pt-5">
-                <div className="font-mono text-[1.75rem] leading-none font-medium text-ink-900">
-                  {pkg.price}
-                </div>
-                <div className="mt-2 text-xs leading-relaxed text-ink-500">
-                  {pkg.priceNote}
-                </div>
-              </div>
-              <ul className="mt-6 flex-1 space-y-2">
-                {pkg.includes.map((item) => (
-                  <li key={item} className="flex gap-2.5 text-sm text-ink-700">
-                    <span
-                      aria-hidden
-                      className="mt-2 h-px w-2.5 shrink-0 bg-ink-400"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-7 border-t border-vellum-300 pt-5">
-                <Button
-                  href="/contact"
-                  variant={pkg.featured ? "solid" : "line"}
-                  className="w-full"
-                >
-                  {pkg.cta}
-                </Button>
-              </div>
-            </div>
-          ))}
+        <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end lg:gap-12">
+          <TitleBlock
+            eyebrow="Pricing"
+            title={content.title}
+            lede={content.summary}
+          />
+          <Button
+            href="/contact"
+            variant="solid"
+            className="w-full shrink-0 sm:w-auto"
+          >
+            {content.cta}
+          </Button>
         </div>
-        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-ink-500">
-          {note}
-        </p>
       </Container>
     </Section>
   );

@@ -17,8 +17,7 @@ import {
   steps,
   fills,
   controls,
-  packages,
-  pricingNote,
+  pricing,
   faqs,
   founderNote,
 } from "@/content/site";
@@ -32,7 +31,7 @@ export default function Home() {
       <HowSection steps={steps} />
       <FillsSection groups={fills} />
       <DataSection controls={controls} />
-      <PricingSection packages={packages} note={pricingNote} />
+      <PricingSection content={pricing} />
       <FaqSection faqs={faqs} />
       <FounderSection
         name={brand.founder.name}

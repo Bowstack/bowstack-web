@@ -8,9 +8,8 @@
  *  2. Data flow stated precisely: PDF bytes stay local, EXTRACTED TEXT leaves.
  *     Never blur those. Retention and logging are still under audit — do not
  *     assert what has not been verified.
- *  3. Pricing is a pilot price, not an established rate card.
- *  4. The import allowance is a plan term, NOT yet enforced in code. Never
- *     describe it as a technical guarantee.
+ *  3. Pricing is quoted after scoping a shop's workflow and rollout.
+ *  4. Do not publish fixed rates, import allowances, or billing terms.
  *  5. Mitchell appears only as a factual compatibility statement, and
  *     brand.nonAffiliation must be visible on every page that names it.
  */
@@ -146,68 +145,18 @@ export const controls: readonly Control[] = [
 
 /* ------------------------------------------------------------------ */
 
-export type Package = {
-  name: string;
-  price: string;
-  priceNote: string;
+export type Pricing = {
+  title: string;
   summary: string;
-  includes: readonly string[];
-  featured?: boolean;
   cta: string;
 };
 
-export const packages: readonly Package[] = [
-  {
-    name: "Pilot",
-    price: "$349",
-    priceNote: "per location, for 30 days. Then month to month.",
-    summary:
-      "One shop, one month, real jobs. We watch it work on your documents and measure what it actually does before either of us commits.",
-    featured: true,
-    includes: [
-      "Install and setup with your team",
-      "Runs on your real insurer PDFs",
-      "Direct line to the person who built it",
-      "We measure minutes per import and correction rate",
-      "Walk away at the end of the month",
-    ],
-    cta: "Start a pilot",
-  },
-  {
-    name: "Per location",
-    price: "$349",
-    priceNote:
-      "per location, per month. Plan allowance of 100 imports; further imports $3 each.",
-    summary:
-      "Unlimited staff at the location. Priced where the claims are keyed, not per seat, so nobody has to ration logins.",
-    includes: [
-      "Unlimited users at that location",
-      "Claim and estimate import",
-      "Updates as the platform's interface changes",
-      "Support direct from the developer",
-      "Month to month, no lock-in",
-    ],
-    cta: "Talk to us",
-  },
-  {
-    name: "Multi-shop",
-    price: "Let's talk",
-    priceNote: "Five or more locations, invoiced centrally.",
-    summary:
-      "Pooled allowance across locations, one invoice, and a rollout that does not leave each shop to sort itself out.",
-    includes: [
-      "Pooled import allowance",
-      "Central billing and reporting",
-      "Coordinated rollout across sites",
-      "Named point of contact",
-    ],
-    cta: "Get in touch",
-  },
-];
-
-/** Shown under the pricing table. Honesty about what these numbers are. */
-export const pricingNote =
-  "Introductory pilot pricing while we build a measured case study, and it may change for later customers. The import allowance is a plan term we reconcile on your invoice, not a hard technical cut-off — if you go over, we talk to you before anything changes.";
+export const pricing: Pricing = {
+  title: "Contact for pricing.",
+  summary:
+    "Every shop works differently. We'll scope Bowstack around your workflow, claim volume, and rollout needs, then provide a tailored quote.",
+  cta: "Contact for pricing",
+};
 
 /* ------------------------------------------------------------------ */
 
