@@ -35,12 +35,35 @@ function requestFor(
   return new Request("https://bowstack.ca/api/contact", {
     method: "POST",
     headers: {
+      Host: "bowstack.ca",
       Origin: "https://bowstack.ca",
       "Content-Type": "application/json",
       ...headers,
     },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
+}
+
+// Mirrors production: `next start` behind the proxy sees its own listen address.
+const proxiedUrl = "https://localhost:3000/api/contact";
+
+async function originStatus(
+  headers: Record<string, string>,
+  url = proxiedUrl,
+): Promise<number> {
+  delete process.env.RESEND_API_KEY;
+  delete process.env.CONTACT_FROM_EMAIL;
+  globalThis.fetch = async () => {
+    throw new Error("Delivery must not be attempted.");
+  };
+
+  const request = new Request(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify(validSubmission()),
+  });
+
+  return (await handleContactPost(request)).status;
 }
 
 async function responseJson(response: Response): Promise<Record<string, unknown>> {
@@ -53,6 +76,85 @@ afterEach(() => {
   else process.env.RESEND_API_KEY = originalApiKey;
   if (originalFrom === undefined) delete process.env.CONTACT_FROM_EMAIL;
   else process.env.CONTACT_FROM_EMAIL = originalFrom;
+});
+
+describe("request origin", () => {
+  // 503 means the origin check passed and the request reached the
+  // unconfigured-delivery check; 403 means the origin was rejected.
+  it("accepts an origin matching the Host header", async () => {
+    assert.equal(await originStatus({ Origin: "https://bowstack.ca", Host: "bowstack.ca" }), 503);
+    assert.equal(
+      await originStatus({ Origin: "https://www.bowstack.ca", Host: "www.bowstack.ca" }),
+      503,
+    );
+  });
+
+  it("prefers the first X-Forwarded-Host value over Host", async () => {
+    assert.equal(
+      await originStatus({
+        Origin: "https://bowstack.ca",
+        Host: "localhost:3000",
+        "X-Forwarded-Host": " bowstack.ca , proxy.example",
+      }),
+      503,
+    );
+    assert.equal(
+      await originStatus({
+        Origin: "https://bowstack.ca",
+        Host: "bowstack.ca",
+        "X-Forwarded-Host": "www.bowstack.ca",
+      }),
+      403,
+    );
+  });
+
+  it("rejects a cross-site origin", async () => {
+    assert.equal(await originStatus({ Origin: "https://example.com", Host: "bowstack.ca" }), 403);
+    assert.equal(
+      await originStatus({ Origin: "https://bowstack.ca.example.com", Host: "bowstack.ca" }),
+      403,
+    );
+  });
+
+  it("rejects a missing, opaque, or unparsable origin", async () => {
+    assert.equal(await originStatus({ Host: "bowstack.ca" }), 403);
+    assert.equal(await originStatus({ Origin: "null", Host: "bowstack.ca" }), 403);
+    assert.equal(await originStatus({ Origin: "not a url", Host: "bowstack.ca" }), 403);
+  });
+
+  it("rejects a request without Host or X-Forwarded-Host", async () => {
+    assert.equal(await originStatus({ Origin: "https://bowstack.ca" }), 403);
+  });
+
+  it("requires https except on localhost", async () => {
+    assert.equal(await originStatus({ Origin: "http://bowstack.ca", Host: "bowstack.ca" }), 403);
+    assert.equal(
+      await originStatus({ Origin: "http://localhost:3000", Host: "localhost:3000" }),
+      503,
+    );
+    assert.equal(
+      await originStatus({ Origin: "http://127.0.0.1:3000", Host: "127.0.0.1:3000" }),
+      503,
+    );
+  });
+
+  it("ignores the request URL host", async () => {
+    assert.equal(
+      await originStatus({ Origin: "https://bowstack.ca", Host: "bowstack.ca" }, proxiedUrl),
+      503,
+    );
+    assert.equal(
+      await originStatus({ Origin: "https://localhost:3000", Host: "bowstack.ca" }, proxiedUrl),
+      403,
+    );
+    assert.equal(
+      await originStatus(
+        { Origin: "https://bowstack.ca", Host: "localhost:3000" },
+        "https://bowstack.ca/api/contact",
+      ),
+      403,
+    );
+  });
 });
 
 describe("contact delivery", () => {
