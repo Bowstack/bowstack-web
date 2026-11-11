@@ -131,15 +131,33 @@ async function readLimitedBody(request: Request): Promise<string | null> {
   }
 }
 
+// Behind a reverse proxy, `next start` builds request.url from its own listen
+// address, so compare the Origin with the public host instead (as Next's Server
+// Actions CSRF check does).
+function publicHost(request: Request): string | null {
+  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",", 1)[0]?.trim();
+  const host = forwardedHost || request.headers.get("host")?.trim();
+  return host ? host.toLowerCase() : null;
+}
+
 function hasSameOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
-  if (!origin) return false;
+  const host = publicHost(request);
+  if (!origin || !host) return false;
 
+  let originUrl: URL;
   try {
-    return new URL(origin).origin === new URL(request.url).origin;
+    originUrl = new URL(origin);
   } catch {
     return false;
   }
+
+  const isLocal = originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1";
+  if (originUrl.protocol !== "https:" && !(isLocal && originUrl.protocol === "http:")) {
+    return false;
+  }
+
+  return originUrl.host === host;
 }
 
 function formatMessage(submission: ContactSubmission): string {
